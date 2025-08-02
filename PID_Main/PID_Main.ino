@@ -10,3 +10,14 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 }
+
+
+class ControlSimulation {
+  public:
+  double previousPosition[1500] {0}; 
+
+  private:
+  
+
+
+}

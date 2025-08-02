@@ -1,0 +1,82 @@
+//
+// Created by becke on 2025/08/02.
+//
+
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
+
+
+
+class Controller {
+
+public:
+    Controller();
+    void simulate(double const kpNew, double const kiNew, double const kdNew, double const start, double const end) {
+        position = start;
+        destination = end;
+        kp = kpNew; kd = kdNew; ki = kiNew;
+        timestep = 0;
+        while (timestep < 1500) {
+            update();
+            timestep ++;
+        }
+    };
+
+    void output(double * destination) const {
+        for (int i = 0; i < 150; i = i +50) {
+            destination[i] = previousPositions[i];
+        }
+
+    }
+
+protected:
+    double mass{1};
+    double friction{1};
+    double destination{60};
+    double position{20};
+    double velocity{0};
+    double acceleration{0};
+    double cumulative{0};
+    double lastError{0};
+
+    double kp{5}, ki{1}, kd{1.1};
+    double dt {0.0025};
+
+
+    int timestep{0};
+    double previousPositions [1500] {0};
+    double previousVelocities [1500] {0};
+    double previousAccelerations [1500] {0};
+
+    void update() {
+        double error = destination - position;
+
+        double proportional = error * kp;
+        cumulative += error * dt;
+        double integral = cumulative * ki;
+
+        double d_error = (error - lastError) / dt;
+        double derivative = kd * d_error;
+
+        double force = proportional + integral + derivative - friction * velocity;
+
+        acceleration = force / mass;
+        velocity += acceleration * dt;
+        position += velocity * dt;
+
+        previousPositions[timestep] = position;
+        previousVelocities[timestep] = velocity;
+        previousAccelerations[timestep] = acceleration;
+
+        lastError = error;
+    }
+
+
+
+
+};
+
+
+
+
+#endif //CONTROLLER_H
