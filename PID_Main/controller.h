@@ -46,9 +46,9 @@ public:
     };
 
 
-    void output(double * destination) {
+    void output(int * destination) {
         for (int i = 0; i < length/2; ++i) {
-            destination[i] = previousPositions[2*i];
+            destination[i] = (int)previousPositions[2*i];
         }
 
     }
@@ -57,7 +57,7 @@ protected:
 
     static const int length = 300;
     const double mass = 1;
-    double friction{1};
+    double friction{1.1};
     double destination{60};
     double position{20};
     double velocity{0};

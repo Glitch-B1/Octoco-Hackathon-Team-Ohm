@@ -1,9 +1,9 @@
 // Josh top begin
 #include <Servo.h>
 #define ARRAY_LENGTH 150
-#define INITIAL_ANGLE 25
+#define INITIAL_ANGLE 0
 #define SERVO_PIN 9
-#define MAX_OUTPUT 90
+#define MAX_OUTPUT 120
 #define MIN_OUTPUT 0
 #include "controller.h"
 
@@ -28,7 +28,7 @@ double I_normal;
 double D_normal;
 
 double start_angle = 25;
-double stop_angle = 65;
+double stop_angle = 75;
 //Ben End
 
 
@@ -59,9 +59,16 @@ I_normal = I_input / 1000.0;
 D_normal = D_input / 1000.0;
 
 
-ctrl.simulateP(P_normal, I_normal, D_normal, start_angle, stop_angle);
-
 ctrl.output(output_angle);
+
+if (moving_up_or_down == 1){
+  ctrl.simulateP(1, 0, 0, start_angle, stop_angle);
+  moving_up_or_down = 0;
+} else if (moving_up_or_down == 0){
+  ctrl.simulateP(1, 0, 0, stop_angle, start_angle);
+  moving_up_or_down = 1;
+}
+
 //Ben Stop
 
 
@@ -80,9 +87,7 @@ ctrl.output(output_angle);
 void output_to_servo() 
 {
   int output = 0;
-
-  if (moving_up_or_down == 1)
-  {
+  
     for (int i = 0; i <= ARRAY_LENGTH; i++)
     {
       output = output_angle[i];
@@ -91,30 +96,14 @@ void output_to_servo()
       {
         output = MAX_OUTPUT;
       }
-
-      arms.write(output);
-      delay(15);
-    }
-
-    moving_up_or_down = 0;
-  }
-  else if (moving_up_or_down == 0)
-  {
-    for (int i = 0; i <= ARRAY_LENGTH; i++)
-    {
-      output = 90 - output_angle[i];
-
       if (output <= MIN_OUTPUT)
       {
         output = MIN_OUTPUT;
       }
 
       arms.write(output);
-      delay(15);
+      delay(10 );
     }
-
-    moving_up_or_down = 1;
-  }
   return;
 }
 // Josh output function end
