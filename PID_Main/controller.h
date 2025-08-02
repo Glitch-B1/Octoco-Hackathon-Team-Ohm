@@ -22,6 +22,28 @@ public:
         }
     };
 
+
+    void simulateP(double const kpNew, double const kiNew, double const kdNew, double const start, double const end) {
+        position = start;
+        destination = end;
+        if (kpNew < 0) kp = 0;
+        if (kdNew < 0) kd = 0;
+        if (kiNew < 0) ki = 0;
+        if (kiNew > 1) ki = 1;
+        if (kpNew > 1) kp = 1;
+        if (kdNew > 1) kd = 1;
+
+        kp = (kpNew * 17) + 5;
+        kd = (kdNew * 4) + 1.1;
+        ki = kiNew * 5;
+
+
+        timestep = 0;
+        while (timestep < 1500) {
+            update();
+            timestep ++;
+        }
+    };
     void output(double * destination) {
         for (int i = 0; i < 150; ++i) {
             destination[i] = previousPositions[10*i];
