@@ -22,9 +22,9 @@ public:
         }
     };
 
-    void output(double * destination) const {
-        for (int i = 0; i < 150; i = i +50) {
-            destination[i] = previousPositions[i];
+    void output(double * destination) {
+        for (int i = 0; i < 150; ++i) {
+            destination[i] = previousPositions[10*i];
         }
 
     }
