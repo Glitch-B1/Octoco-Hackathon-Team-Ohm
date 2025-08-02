@@ -46,17 +46,17 @@ public:
     };
 
 
-    void output(int * destination) {
-        for (int i = 0; i < length/10; ++i) {
-            destination[i] = (int)previousPositions[3*i];
+    void output(double * destination) {
+        for (int i = 0; i < length/2; ++i) {
+            destination[i] = previousPositions[2*i];
         }
 
     }
 
 protected:
 
-    static const int length = 400;
-    static const double mass = 1;
+    static const int length = 300;
+    const double mass = 1;
     double friction{1};
     double destination{60};
     double position{20};
@@ -66,13 +66,12 @@ protected:
     double lastError{0};
 
     double kp{5}, ki{1}, kd{1.1};
-    double dt {0.0075};
+    double dt {0.01};
 
 
     int timestep{0};
     double previousPositions [length] {0};
-    //double previousVelocities [1500] {0};
-    //double previousAccelerations [1500] {0};
+
 
     void update() {
         double error = destination - position;
